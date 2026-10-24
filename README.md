@@ -18,7 +18,7 @@ npm run build        # production PWA in dist/
 npm run e2e          # Playwright smoke tests against the production build
 ```
 
-On a phone, open the deployed page and *Add to Home Screen*: it runs
+Live at **https://saveriobanchi.github.io/Pokerforge/** (every push to `main` is tested and republished to the `gh-pages` branch). On a phone, open it and *Add to Home Screen*: it runs
 full-screen like an app and saves on the device (export/import in Settings).
 
 ## The games

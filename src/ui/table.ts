@@ -47,7 +47,7 @@ export function openTable(g: Game, b: Building, host: { banner: (text: string, k
   const upBtn = h('button', { class: 'btn small up', onclick: () => upgrade() });
   const infoBtn = h('button', { class: 'btn small ghost', onclick: () => { rules.classList.toggle('open'); audio.play('tap'); } }, '?');
   const moreBtn = h('button', { class: 'btn small ghost', onclick: () => { tools.classList.toggle('open'); audio.play('tap'); } }, '⋯');
-  const rules = h('div', { class: 'rules' }, h('p', { text: def.rules }), h('p', { class: 'muted', text: ruleLine(game) }));
+  const rules = h('div', { class: 'rules' }, h('p', { text: def.rules }), h('p', { class: 'muted', text: ruleLine(game) }), h('p', { class: 'muted', text: 'Keyboard: Space or Enter plays, Esc leaves the table.' }));
   const tools = h('div', { class: 'tools' },
     h('button', { class: 'btn small', onclick: () => { if (roundOpen(g.s, game)) { g.fail('Finish the round first.'); return; } host.close(); g.setMode({ kind: 'move', id: b.id, dir: b.dir }); } }, img(glyph('move')), 'Move'),
     BUILDINGS[b.type].rotatable ? h('button', { class: 'btn small', onclick: () => { g.act(() => A.rotate(g.s, b.id)); } }, img(glyph('rotate')), 'Turn') : null,
@@ -58,6 +58,8 @@ export function openTable(g: Game, b: Building, host: { banner: (text: string, k
     tillEl, upBtn, infoBtn, moreBtn,
     h('button', { class: 'close', onclick: () => host.close() }, img(glyph('close'))));
 
+  // this visit's running result
+  let session = 0, rounds = 0;
   const refresh = () => {
     const t = table();
     const stars = masteryStar(s().stats.playsBy[game] ?? 0);
@@ -66,7 +68,8 @@ export function openTable(g: Game, b: Building, host: { banner: (text: string, k
     sub.replaceChildren(
       h('span', { text: `Bets ${short(minBet(game))}–${short(maxBet(s(), game, t))}` }),
       h('span', { class: 'stars', title: `Mastery: ${plays} plays · next star at ${nextStarAt(plays)}`, text: STAR(stars) }),
-      ...(hotGame(s()) === game ? [h('span', { class: 'hot', text: '🔥 Hot table' })] : []));
+      ...(hotGame(s()) === game ? [h('span', { class: 'hot', text: '🔥 Hot table' })] : []),
+      ...(rounds ? [h('span', { class: 'session ' + (session >= 0 ? 'good' : 'bad'), title: `This visit: ${rounds} round${rounds > 1 ? 's' : ''}`, text: `${session >= 0 ? '+' : '−'}${short(Math.abs(session))} this visit` })] : []));
     const till = Math.floor(t.till), cap = tillCap(s(), t);
     tillEl.replaceChildren(img(uiIcon('chips'), 'px'), h('span', { class: 'num', text: short(till) }), h('i', { style: `width:${Math.round((till / Math.max(1, cap)) * 100)}%` }));
     tillEl.title = `Patrons’ till: ${fmtN(till)} / ${fmtN(cap)} · ${short(seatTake(s(), t) * def.seats)}/min with every seat filled. Tap to collect.`;
@@ -110,6 +113,8 @@ export function openTable(g: Game, b: Building, host: { banner: (text: string, k
     reveal(r: Play, stake: number, label?: string) {
       const ret = r.ret ?? 0;
       g.ui.hideChips(-ret);
+      session += ret - stake;
+      rounds++;
       const mult = stake > 0 ? ret / stake : ret > 0 ? 10 : 0;
       if (r.second) { host.banner(`Second chance: ${fmtN(r.second)} back`, 'push', 1600); audio.play('coin'); }
       else if (ret <= 0) { host.banner(label ?? 'No luck', 'lose', 1300); outcomeFx(ctx, 'lose'); }

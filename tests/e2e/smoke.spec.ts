@@ -11,6 +11,9 @@ async function fresh(page: Page) {
   await page.evaluate(() => new Promise<void>((r) => { const q = indexedDB.deleteDatabase('pokerforge'); q.onsuccess = q.onerror = q.onblocked = () => r(); }));
   await page.goto('./');
   await page.waitForFunction(() => window.gameReady === true, null, { timeout: 60_000 });
+  // a first visit opens with the welcome card
+  await page.locator('.welcome .btn.primary').click();
+  await page.waitForTimeout(250);
 }
 
 async function tapTile(page: Page, x: number, y: number, dy = -10) {

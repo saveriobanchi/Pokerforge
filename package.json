@@ -13,7 +13,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "e2e": "playwright test",
-    "check": "npm run lint && npm run typecheck && npm test"
+    "check": "npm run lint && npm run typecheck && npm test",
+    "icons": "node scripts/make-icons.mjs"
   },
   "dependencies": {
     "pixi.js": "^8.22.0"

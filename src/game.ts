@@ -117,6 +117,7 @@ export class Game {
 
     this.ui.refreshAll();
     if (offline && (offline.banked + offline.tills > 0 || offline.seconds > 600)) this.ui.showAway(offline);
+    else if (!loaded && !params.has('demo')) this.ui.showWelcome();
     if (this.recovered) this.ui.hint('Your casino was restored from a backup.', false, 4000);
     document.getElementById('boot')?.classList.add('gone');
     (window as unknown as { gameReady: boolean; game: Game; actions: typeof A }).gameReady = true;
@@ -318,7 +319,10 @@ export class Game {
   }
 
   private onKey(e: KeyboardEvent): void {
-    if ((e.target as HTMLElement)?.tagName === 'TEXTAREA') return;
+    const tag = (e.target as HTMLElement)?.tagName;
+    if (tag === 'TEXTAREA' || tag === 'INPUT') return;
+    // at a table, Space or Enter presses the main button (deal, spin, roll, draw…)
+    if ((e.key === ' ' || e.key === 'Enter') && this.ui.tablePrimary()) { e.preventDefault(); return; }
     if (e.key === 'Escape') { this.setMode({ kind: 'play' }); this.select(null); this.ui.closeAll(); }
     if (e.key === 'r' || e.key === 'R') this.rotateMode();
     if (e.key === 'o' || e.key === 'O') this.toggleObserve();

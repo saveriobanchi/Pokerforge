@@ -476,6 +476,28 @@ export class UI {
     this.openModal(t.el, true, 'table');
   }
 
+  /** Press the open table's main button (keyboard shortcut). Returns false when no table is open. */
+  tablePrimary(): boolean {
+    if (!this.table || !this.modalOpen()) return false;
+    const btn = this.modal.querySelector<HTMLButtonElement>('.controls .actions .btn.primary:not([style*="display: none"]):not([disabled]), .controls .big-call');
+    btn?.click();
+    return true;
+  }
+
+  /** First visit: what the game is, in three lines. */
+  showWelcome(): void {
+    const content = h('div', { class: 'away welcome' },
+      h('div', { class: 'caps', text: 'Welcome to' }),
+      h('div', { class: 'h', text: 'Pokerforge' }),
+      h('p', { text: 'A scrap of floating land, a wishing well, a coin-toss stand and 100 chips. Build it into the finest casino in the skies.' }),
+      h('ul', {},
+        h('li', { text: 'Tap a table to play. Every wager earns renown, comps and mastery — win or lose.' }),
+        h('li', { text: 'Patrons fill your tables’ tills. Tap a table to collect, and build to draw bigger crowds.' }),
+        h('li', { text: 'Broke? Fish coins from the wishing well. All chips are play money.' })),
+      h('div', { class: 'actions' }, h('button', { class: 'btn primary', onclick: () => this.closeModal() }, 'Open the doors')));
+    this.openModal(content);
+  }
+
   private openTables(): void {
     const s = this.g.s;
     const list = h('div', { class: 'table-list scroll' });

@@ -73,6 +73,8 @@ test('build a slot machine from the tray and spin it', async ({ page }) => {
 });
 
 test('every table opens and plays a round in the demo casino', async ({ page }) => {
+  // fifteen tables on a software-rendered browser: give it room
+  test.setTimeout(300_000);
   const errors: string[] = [];
   page.on('pageerror', (e) => errors.push(e.message));
   await page.goto('./?demo');

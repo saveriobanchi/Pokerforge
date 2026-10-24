@@ -63,7 +63,8 @@ export const COMP_RATE = 0.01;
 
 /** Renown: XP to go from level L to L+1. */
 export function xpForLevel(level: number): number {
-  return Math.round(60 * 1.6 ** (level - 1));
+  // the mid game stretches a little: from renown 12 each level asks a bit more than the curve
+  return Math.round(60 * 1.6 ** (level - 1) * (1 + Math.max(0, level - 12) * 0.12));
 }
 
 /** The level-up chip gift (a small purse that keeps early play going). */

@@ -19,7 +19,7 @@ browser smoke tests against the production build. CI runs all of it.
   through the public API (sensible bets and strategy, building, paving,
   decorating, upgrading, perks) and must reach renown milestones, every table
   and the completed Pokerforge inside measured windows (≈0.7h to renown 10,
-  ≈3.4h to renown 20, ≈17h to finish for a tireless player).
+  ≈4h to renown 20, ≈19h to finish for a tireless player).
 
 ## End to end (Playwright, `tests/e2e`, phone landscape + desktop)
 

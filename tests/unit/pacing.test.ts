@@ -11,7 +11,7 @@ describe('pacing (scripted player)', () => {
     const at = (id: string) => bot.timeline.find((x) => x.id === id)?.t ?? Infinity;
     const report = ['level5', 'level10', 'level15', 'level20', 'level25', 'level27', 'build_blackjack', 'build_roulette', 'build_poker', 'build_crash', 'build_holdem', 'wonder1', 'wonder3'].map((k) => `${k}: ${fmt(at(k))}`).join(' · ');
     console.log(report, `| chips ${Math.floor(bot.s.chips)} level ${bot.s.renown.level} tables ${[...bot.s.buildings.values()].length}`);
-    // measured: level10 ≈ 0.7h, level20 ≈ 3.4h, every table ≈ 4.7h, the Pokerforge ≈ 17h (a tireless, sensible player)
+    // measured: level10 ≈ 0.7h, level20 ≈ 4h, every table ≈ 5.7h, the Pokerforge ≈ 19h (a tireless, sensible player)
     expect(at('level5')).toBeLessThan(0.5 * 3600);
     expect(at('level10')).toBeLessThan(2 * 3600);
     expect(at('level20')).toBeLessThan(8 * 3600);

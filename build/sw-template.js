@@ -1,4 +1,4 @@
-/* Aetherforge service worker — generated at build time. */
+/* Pokerforge service worker — generated at build time. */
 const CACHE = 'pokerforge-__CACHE_VERSION__';
 const PRECACHE = __PRECACHE_URLS__;
 

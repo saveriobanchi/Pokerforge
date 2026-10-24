@@ -12,7 +12,7 @@ export default defineConfig({
     chunkSizeWarningLimit: 1200,
     rollupOptions: {
       input: { main: 'index.html' },
-      output: { manualChunks: { pixi: ['pixi.js'] } },
+      output: { manualChunks: (id: string) => (id.includes('node_modules/pixi.js') ? 'pixi' : undefined) },
     },
   },
   server: { host: true, port: 5173 },
